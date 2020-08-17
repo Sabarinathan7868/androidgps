@@ -1,5 +1,6 @@
 package com.example.studentapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -10,6 +11,8 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,16 +25,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import static java.security.AccessController.getContext;
 
@@ -55,7 +63,6 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_data);
-
         tvDob = findViewById(R.id.tv_dob);
         spClassList = findViewById(R.id.sp_class_list);
         spSectionList = findViewById(R.id.sp_section_list);
@@ -125,6 +132,7 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
         });
     }
 
+
     private void pickLocation() {
         //TODO pick location
 //        Intent intent = new Intent(AddDataActivity.this, AddLocationActivity.class);
@@ -165,29 +173,37 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CAMERA) {
-                Bundle bundle = data.getExtras();
-                final Bitmap bmp = (Bitmap) bundle.get("data");
-                cvProfilePicture.setImageBitmap(bmp);
+            if (resultCode == Activity.RESULT_OK) {
+                if (requestCode == REQUEST_CAMERA) {
+                    Bundle bundle = data.getExtras();
+                    final Bitmap bmp = (Bitmap) bundle.get("data");
+                    cvProfilePicture.setImageBitmap(bmp);
+                }
             }
-        }
 
-        //TODO for location pick
-        if (resultCode == PLACE_PICKER_REQUEST) {
-            if (resultCode==RESULT_OK){
-                Place place = PlacePicker.getPlace(data, this);
+            //TODO for location pick
+            if (resultCode == RESULT_OK) {
+            if (requestCode==1){
+                Place place = PlacePicker.getPlace(this, data);
 //                String address = String.format("Place @s",place.getAddress());
 //                tvLocation.setText(address);
-
+                Geocoder geocoder;
+                List<Address> addresses;
+                geocoder = new Geocoder(this, Locale.getDefault());
                 StringBuilder stringBuilder = new StringBuilder();
-                String latitude = String.valueOf(place.getLatLng().latitude);
-                String longitude = String.valueOf(place.getLatLng().longitude);
-                stringBuilder.append("LATITUDE :");
-                stringBuilder.append(latitude);
-                stringBuilder.append("\n");
-                stringBuilder.append("LONGITUDE");
-                stringBuilder.append(longitude);
+
+                try {
+                    addresses = geocoder.getFromLocation(place.getLatLng().latitude, place.getLatLng().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                    String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    stringBuilder.append(address);
+                    String city = addresses.get(0).getLocality();
+                    String state = addresses.get(0).getAdminArea();
+                    String country = addresses.get(0).getCountryName();
+                    String postalCode = addresses.get(0).getPostalCode();
+                    String knownName = addresses.get(0).getFeatureName();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 tvLocation.setText(stringBuilder.toString());
                 Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
             }
