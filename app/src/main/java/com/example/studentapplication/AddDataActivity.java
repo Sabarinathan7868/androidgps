@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -39,12 +40,15 @@ import static java.security.AccessController.getContext;
 public class AddDataActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     TextView tvDob, tvLocation;
+    EditText etName, etSchoolName, etBloodGroup, etFatherName, etMotherName, etParentsContactNo, etAddress1, etAddress2, etCity, etState, etZip, etEmergencyContactNo;
     DatePickerDialog datePickerDialog;
     Spinner spClassList, spSectionList;
+    Button btnAddData;
     CircleImageView civEducationIcon, civProfileEditIcon, cvProfilePicture;
     Integer REQUEST_CAMERA = 0;
     int PLACE_PICKER_REQUEST = 1;
 
+    DatabaseHelper addDataDb;
 
     String[] listClass = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
 
@@ -57,13 +61,85 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
         setContentView(R.layout.activity_add_data);
 
         tvDob = findViewById(R.id.tv_dob);
+        tvLocation = findViewById(R.id.tv_add_location);
         spClassList = findViewById(R.id.sp_class_list);
         spSectionList = findViewById(R.id.sp_section_list);
-        spClassList.setOnItemSelectedListener(this);
-        spSectionList.setOnItemSelectedListener(this);
         civProfileEditIcon = findViewById(R.id.civ_profile_edit_icon);
         cvProfilePicture = findViewById(R.id.civ_edit_profile);
-        tvLocation = findViewById(R.id.tv_add_location);
+        etName = findViewById(R.id.et_name);
+        etSchoolName = findViewById(R.id.et_school_name);
+        etBloodGroup = findViewById(R.id.et_blood_group);
+        etFatherName = findViewById(R.id.et_father_name);
+        etMotherName = findViewById(R.id.et_mother_name);
+        etParentsContactNo = findViewById(R.id.et_parents_contact_no);
+        etAddress1 = findViewById(R.id.et_address_1);
+        etAddress2 = findViewById(R.id.et_address_2);
+        etCity = findViewById(R.id.et_city);
+        etState = findViewById(R.id.et_state);
+        etZip = findViewById(R.id.et_zip);
+        etEmergencyContactNo = findViewById(R.id.et_emergency_contact_no);
+        btnAddData = findViewById(R.id.btn_submit);
+        spClassList.setOnItemSelectedListener(this);
+        spSectionList.setOnItemSelectedListener(this);
+
+        addDataDb = new DatabaseHelper(this);
+
+        btnAddData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO add data into db
+                String name = etName.getText().toString();
+                String schoolName = etSchoolName.getText().toString();
+                String dob = tvDob.getText().toString();
+                String classNo = spClassList.getSelectedItem().toString();
+                String section = spSectionList.getSelectedItem().toString();
+                String bloodGroup = etBloodGroup.getText().toString();
+                String fatherName = etFatherName.getText().toString();
+                String motherName = etMotherName.getText().toString();
+                String parentsContactNo = etParentsContactNo.getText().toString();
+                String address1 = etAddress1.getText().toString();
+                String address2 = etAddress2.getText().toString();
+                String city = etCity.getText().toString();
+                String state = etState.getText().toString();
+                String zip = etZip.getText().toString();
+                String emergencyContactNo = etEmergencyContactNo.getText().toString();
+                String addLocation = tvLocation.getText().toString();
+
+
+                if (name.equals("") || schoolName.equals("") || dob.equals("") || bloodGroup.equals("") || fatherName.equals("") || motherName.equals("")
+                        || parentsContactNo.equals("") || address1.equals("") || address2.equals("") || city.equals("") || state.equals("") || zip.equals("") ||
+                        emergencyContactNo.equals("")) {
+                    Toast.makeText(AddDataActivity.this, "Fields are empty", Toast.LENGTH_SHORT).show();
+                } else {
+                    Boolean addData = addDataDb.addDataInsert(name, classNo, section, schoolName, dob, bloodGroup, fatherName,
+                            motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation);
+                    if (addData == true) {
+                        Boolean addDataInsert = addDataDb.addDataInsert(name, classNo, section, schoolName, dob, bloodGroup, fatherName,
+                                motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation);
+                        if (addDataInsert == true) {
+
+                            etName.getText().clear();
+                            etSchoolName.getText().clear();
+                            etBloodGroup.getText().clear();
+                            etFatherName.getText().clear();
+                            etMotherName.getText().clear();
+                            etParentsContactNo.getText().clear();
+                            etAddress1.getText().clear();
+                            etAddress2.getText().clear();
+                            etCity.getText().clear();
+                            etState.getText().clear();
+                            etZip.getText().clear();
+                            etEmergencyContactNo.getText().clear();
+
+
+//                            Intent intent = new Intent(SignUpActivity.this, Sign_in.class);
+//                            startActivity(intent);
+                            Toast.makeText(getApplicationContext(), "Data Registered Successfully", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+        });
 
 
         tvLocation.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +207,7 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
 //        startActivity(intent);
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
-            startActivityForResult(builder.build(this),PLACE_PICKER_REQUEST);
+            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
         } catch (GooglePlayServicesRepairableException e) {
             e.printStackTrace();
         } catch (GooglePlayServicesNotAvailableException e) {
@@ -175,7 +251,7 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
 
         //TODO for location pick
         if (resultCode == PLACE_PICKER_REQUEST) {
-            if (resultCode==RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
 //                String address = String.format("Place @s",place.getAddress());
 //                tvLocation.setText(address);
@@ -198,7 +274,7 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+        Toast.makeText(this, adapterView.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
