@@ -21,6 +21,13 @@ public class MainActivity extends AppCompatActivity {
         signUp = findViewById(R.id.sign_up);
         btnLogin = findViewById(R.id.btn_login);
 
+      /*  if (PreferenceUtiles.getUserName(this) != null || !PreferenceUtiles.getUserName(this).equals("")){
+            Intent intent = new Intent(MainActivity.this, StudentDatabaseDashboard.class);
+            startActivity(intent);
+        }else{
+
+        }*/
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

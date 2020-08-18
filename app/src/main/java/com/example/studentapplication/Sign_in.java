@@ -24,7 +24,22 @@ public class Sign_in extends AppCompatActivity {
         db = new DatabaseHelper(this);
         etUserName = findViewById(R.id.et_user_name);
         etPassword = findViewById(R.id.et_password);
-        btnLogin = findViewById(R.id.btn_login);
+        btnLogin = findViewById(R.id.btn_sign_in_login);
+
+/*        if (PreferenceUtiles.getUserName(this) != null || !PreferenceUtiles.getUserName(this).equals("")){
+            Intent intent = new Intent(Sign_in.this, StudentDatabaseDashboard.class);
+            startActivity(intent);
+        }else{
+
+        }*/
+
+        //TODO FOR LOGOUT
+        /*PreferenceUtiles.saveUserName("",this);
+        PreferenceUtiles.savePassword("",this);
+        Intent intent = new Intent(Sign_in.this, Sign_in.class);
+        startActivity(intent);
+        finish();
+        return true;*/
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,8 +50,11 @@ public class Sign_in extends AppCompatActivity {
                 Boolean checkEmailPass = db.userNamePassword(userName,password);
                 //noinspection PointlessBooleanExpression
                 if (checkEmailPass==true){
+//                    PreferenceUtiles.saveUserName(userName, getApplicationContext());
+//                    PreferenceUtiles.savePassword(password, getApplicationContext());
                     Intent studentDash = new Intent(Sign_in.this, StudentDatabaseDashboard.class);
                     startActivity(studentDash);
+                    finish();
                     Toast.makeText(getApplicationContext(), "Successfully Login", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getApplicationContext(), "Wrong User or Password", Toast.LENGTH_SHORT).show();

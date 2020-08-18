@@ -36,4 +36,15 @@
         <item name="android:paddingBottom">5dp</item>
         <item name="android:popupBackground">#DFFFFFFF</item>
     </style>
+
+    <style name="kyc_view_data_next_image">
+        <item name="android:layout_width">65dp</item>
+        <item name="android:layout_height">65dp</item>
+        <item name="android:layout_marginStart" tools:ignore="NewApi">5dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:contentDescription">Profile</item>
+        <item name="android:src">@drawable/ic_arrow_forward</item>
+        <item name="android:layout_gravity">start</item>
+    </style>
+
 </resources>
