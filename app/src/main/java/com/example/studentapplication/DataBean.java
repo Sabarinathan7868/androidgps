@@ -9,6 +9,24 @@ public class DataBean {
     protected String classNo;
     protected String section;
     protected Bitmap image;
+    private String lat;
+    private String longs;
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLongs() {
+        return longs;
+    }
+
+    public void setLongs(String longs) {
+        this.longs = longs;
+    }
 
     public Bitmap getImage() {
         return image;

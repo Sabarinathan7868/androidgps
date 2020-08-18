@@ -61,7 +61,8 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
 RadioButton genderRadioButton, female;
     Integer REQUEST_CAMERA = 0;
     int PLACE_PICKER_REQUEST = 1;
-
+    String lat = "";
+    String longs = "";
     DatabaseHelper addDataDb;
 
     String[] listClass = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
@@ -137,10 +138,10 @@ RadioButton genderRadioButton, female;
                     Toast.makeText(AddDataActivity.this, "Fields are empty", Toast.LENGTH_SHORT).show();
                 } else {
                     Boolean addData = addDataDb.addDataInsert(name,radioGroup, classNo, section, schoolName, dob, bloodGroup, fatherName,
-                            motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation, byteArray);
+                            motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation, byteArray,lat, longs);
                     if (addData == true) {
                         Boolean addDataInsert = addDataDb.addDataInsert(name, radioGroup, classNo, section, schoolName, dob, bloodGroup, fatherName,
-                                motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation, byteArray);
+                                motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation, byteArray, lat, longs);
                         if (addDataInsert == true) {
 
                             etName.getText().clear();
@@ -301,6 +302,8 @@ RadioButton genderRadioButton, female;
                 StringBuilder stringBuilder = new StringBuilder();
 
                 try {
+                    this.lat = place.getLatLng().latitude +"";
+                    this.longs = place.getLatLng().longitude+"";
                     addresses = geocoder.getFromLocation(place.getLatLng().latitude, place.getLatLng().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                     String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                     stringBuilder.append(address);

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -17,12 +18,16 @@ public class ViewDataActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+         String TAG=ViewDataActivity.class.getSimpleName();
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_view_data);
         rvViewData = findViewById(R.id.rv_view_data);
-        addDataDb = new DatabaseHelper(this);
+      addDataDb = new DatabaseHelper(this);
+
+/*
         rvViewData.setHasFixedSize(true);
+*/
         rvViewData.setLayoutManager(new LinearLayoutManager(this));
 //        rvViewData.setItemAnimator(new DefaultItemAnimator());
         try {

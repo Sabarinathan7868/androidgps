@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String bloodGroup, String fatherName, String motherName, String parentsContactNo,
                 String address1, String address2, String city, String state, String zip,
                 String emergencyContactNo, String addLocation*/
-        db.execSQL("Create table studentData(id INTEGER primary key AUTOINCREMENT NOT NULL,name text , genderRadioButton text,class text,section text, schoolname text,dob text,bloodGroup text,fatherName text,motherName text,parentsContactNo text,address1 text,address2 text,city text,state text,zip text,emergencyContactNo text,addLocation text, image BLOB)");
+        db.execSQL("Create table studentData(id INTEGER primary key AUTOINCREMENT NOT NULL,name text , genderRadioButton text,class text,section text, schoolname text,dob text,bloodGroup text,fatherName text,motherName text,parentsContactNo text,address1 text,address2 text,city text,state text,zip text,emergencyContactNo text,addLocation text, image BLOB, lat text,longs text)");
     }
 
     @Override
@@ -68,7 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public  boolean addDataInsert(String name, String genderRadioButton, String classNo, String section, String schoolName, String dob,
                                  String bloodGroup, String fatherName, String motherName, String parentsContactNo,
                                  String address1, String address2, String city, String state, String zip,
-                                 String emergencyContactNo, String addLocation, byte [] image){
+                                 String emergencyContactNo, String addLocation, byte [] image, String lat, String longs){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name",name);
@@ -89,22 +89,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("emergencyContactNo",emergencyContactNo);
         contentValues.put("addLocation",addLocation);
         contentValues.put("image", image);
+        contentValues.put("lat", lat);
+        contentValues.put("longs", longs);
         long ins = db.insert("studentData", null,contentValues);
         if (ins==1) return  false;
         else return true;
     }
     public List<DataBean> getAllData() throws IOException {
         List<DataBean> ddatabean = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("Select * from studentData ",new String[]{});
         if(cursor.getCount() > 0){
-            while(cursor.moveToFirst()){
+            while(cursor.moveToNext()){
                 DataBean data = new DataBean();
                 data.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 data.setName(cursor.getString(cursor.getColumnIndex("name")));
                 data.setClassNo(cursor.getString(cursor.getColumnIndex("class")));
                 data.setSection(cursor.getString(cursor.getColumnIndex("section")));
                 data.setImage(getImage(cursor.getBlob(cursor.getColumnIndex("image"))));
+                data.setLat(cursor.getString(cursor.getColumnIndex("lat")));
+                data.setLongs(cursor.getString(cursor.getColumnIndex("longs")));
                 ddatabean.add(data);
             }
         }
@@ -117,9 +121,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
         }catch (Exception e){
-
+            e.printStackTrace();
         }
-
         return bitmap;
     }
 

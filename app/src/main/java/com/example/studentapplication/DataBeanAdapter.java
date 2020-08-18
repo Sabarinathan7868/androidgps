@@ -47,6 +47,7 @@ public class DataBeanAdapter extends RecyclerView.Adapter<DataBeanAdapter.ViewHo
         DataBean item = items.get(position);
         holder.name.setText(item.name);
         holder.classAndSection.setText(item.classNo);
+        holder.civViewDataProfile.setImageBitmap(item.image);
         holder.civViewDataNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

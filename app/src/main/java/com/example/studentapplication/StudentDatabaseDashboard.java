@@ -53,7 +53,7 @@ public class StudentDatabaseDashboard extends AppCompatActivity {
         mapView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mapView = new Intent(StudentDatabaseDashboard.this, MapViewActivity.class);
+                Intent mapView = new Intent(StudentDatabaseDashboard.this, MapsActivity.class);
                 startActivity(mapView);
             }
         });
