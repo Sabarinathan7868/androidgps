@@ -38,69 +38,70 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //inserting in database
-    public  boolean insert(String userName, String password){
+    public boolean insert(String userName, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("userName",userName);
-        contentValues.put("password",password);
-        long ins = db.insert("user", null,contentValues);
-        if (ins==1) return  false;
+        contentValues.put("userName", userName);
+        contentValues.put("password", password);
+        long ins = db.insert("user", null, contentValues);
+        if (ins == 1) return false;
         else return true;
     }
 
     //check if email exists
-    public boolean chkUserName(String userName){
+    public boolean chkUserName(String userName) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("Select * from user where userName=?",new String[]{userName});
-        if (cursor.getCount()>0) return false;
+        Cursor cursor = db.rawQuery("Select * from user where userName=?", new String[]{userName});
+        if (cursor.getCount() > 0) return false;
         else return true;
     }
 
     //checking the email and password
-    public boolean userNamePassword(String userName,String password){
+    public boolean userNamePassword(String userName, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("Select * from user where userName=? and password=?",new String[]{userName,password});
-        if (cursor.getCount()>0) return true;
+        Cursor cursor = db.rawQuery("Select * from user where userName=? and password=?", new String[]{userName, password});
+        if (cursor.getCount() > 0) return true;
         else return false;
     }
 
     //inserting user data into database
-    public  boolean addDataInsert(String name, String genderRadioButton, String classNo, String section, String schoolName, String dob,
+    public boolean addDataInsert(String name, String genderRadioButton, String classNo, String section, String schoolName, String dob,
                                  String bloodGroup, String fatherName, String motherName, String parentsContactNo,
                                  String address1, String address2, String city, String state, String zip,
-                                 String emergencyContactNo, String addLocation, byte [] image, String lat, String longs){
+                                 String emergencyContactNo, String addLocation, byte[] image, String lat, String longs) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("name",name);
+        contentValues.put("name", name);
         contentValues.put("genderRadioButton", genderRadioButton);
-        contentValues.put("class",classNo);
-        contentValues.put("section",section);
-        contentValues.put("schoolName",schoolName);
-        contentValues.put("dob",dob);
-        contentValues.put("bloodGroup",bloodGroup);
-        contentValues.put("fatherName",fatherName);
-        contentValues.put("motherName",motherName);
-        contentValues.put("parentsContactNo",parentsContactNo);
-        contentValues.put("address1",address1);
-        contentValues.put("address2",address2);
-        contentValues.put("city",city);
-        contentValues.put("state",state);
-        contentValues.put("zip",zip);
-        contentValues.put("emergencyContactNo",emergencyContactNo);
-        contentValues.put("addLocation",addLocation);
+        contentValues.put("class", classNo);
+        contentValues.put("section", section);
+        contentValues.put("schoolName", schoolName);
+        contentValues.put("dob", dob);
+        contentValues.put("bloodGroup", bloodGroup);
+        contentValues.put("fatherName", fatherName);
+        contentValues.put("motherName", motherName);
+        contentValues.put("parentsContactNo", parentsContactNo);
+        contentValues.put("address1", address1);
+        contentValues.put("address2", address2);
+        contentValues.put("city", city);
+        contentValues.put("state", state);
+        contentValues.put("zip", zip);
+        contentValues.put("emergencyContactNo", emergencyContactNo);
+        contentValues.put("addLocation", addLocation);
         contentValues.put("image", image);
         contentValues.put("lat", lat);
         contentValues.put("longs", longs);
-        long ins = db.insert("studentData", null,contentValues);
-        if (ins==1) return  false;
+        long ins = db.insert("studentData", null, contentValues);
+        if (ins == 1) return false;
         else return true;
     }
+
     public List<DataBean> getAllData() throws IOException {
-        List<DataBean> ddatabean = new ArrayList<>();
+        List<DataBean> dataBean = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("Select * from studentData ",new String[]{});
-        if(cursor.getCount() > 0){
-            while(cursor.moveToNext()){
+        Cursor cursor = db.rawQuery("Select * from studentData ", new String[]{});
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
                 DataBean data = new DataBean();
                 data.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 data.setName(cursor.getString(cursor.getColumnIndex("name")));
@@ -109,18 +110,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 data.setImage(getImage(cursor.getBlob(cursor.getColumnIndex("image"))));
                 data.setLat(cursor.getString(cursor.getColumnIndex("lat")));
                 data.setLongs(cursor.getString(cursor.getColumnIndex("longs")));
-                ddatabean.add(data);
+                //newly Added
+                data.setSchoolName(cursor.getString(cursor.getColumnIndex("schoolname")));
+                data.setGender(cursor.getString(cursor.getColumnIndex("genderRadioButton")));
+                data.setDob(cursor.getString(cursor.getColumnIndex("dob")));
+                data.setBloodGroup(cursor.getString(cursor.getColumnIndex("bloodGroup")));
+                data.setFatherName(cursor.getString(cursor.getColumnIndex("fatherName")));
+                data.setMotherName(cursor.getString(cursor.getColumnIndex("motherName")));
+                data.setParentContactNo(cursor.getString(cursor.getColumnIndex("parentsContactNo")));
+                data.setAdd1(cursor.getString(cursor.getColumnIndex("address1")));
+                data.setAdd2(cursor.getString(cursor.getColumnIndex("address2")));
+                data.setCity(cursor.getString(cursor.getColumnIndex("city")));
+                data.setState(cursor.getString(cursor.getColumnIndex("state")));
+                data.setZip(cursor.getString(cursor.getColumnIndex("zip")));
+                data.setEmergencyContactNo(cursor.getString(cursor.getColumnIndex("emergencyContactNo")));
+                data.setLocation(cursor.getString(cursor.getColumnIndex("addLocation")));
+                dataBean.add(data);
             }
         }
-        return ddatabean;
+        return dataBean;
     }
 
 
     public Bitmap getImage(byte[] image) throws IOException {
-        Bitmap  bitmap = null;
+        Bitmap bitmap = null;
         try {
             bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return bitmap;

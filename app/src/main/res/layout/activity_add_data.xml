@@ -36,7 +36,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_add_location" />
+                app:layout_constraintTop_toBottomOf="@id/et_add_location" />
 
             <EditText
                 android:id="@+id/et_name"
@@ -78,7 +78,7 @@
                 android:textColorHint="#579791"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_dob"
+                app:layout_constraintTop_toBottomOf="@id/et_dob"
                 tools:ignore="Autofill,LabelFor,TextFields" />
 
             <EditText
@@ -192,7 +192,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Zip"
                 android:textColor="#000000"
@@ -324,7 +324,6 @@
                 android:text="Gender :"
                 android:textColor="#579791"
                 android:textSize="18sp"
-                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_school_name" />
 
@@ -341,43 +340,46 @@
                 app:layout_constraintStart_toEndOf="@id/gender"
                 app:layout_constraintTop_toTopOf="@id/gender" />
 
-            <TextView
-                android:id="@+id/tv_dob"
+            <EditText
+                android:id="@+id/et_dob"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/border"
-                android:gravity="center_vertical"
                 android:hint="-/-/...."
                 android:textColor="#000000"
                 android:textColorHint="#000000"
                 android:textSize="18sp"
+                android:focusable="false"
+                android:clickable="false"
+                android:cursorVisible="false"
                 app:drawableEndCompat="@drawable/ic_calendar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gender"
-                tools:ignore="HardcodedText" />
+                tools:ignore="Autofill,HardcodedText,TextFields" />
 
-            <TextView
-                android:id="@+id/tv_add_location"
+            <EditText
+                android:id="@+id/et_add_location"
                 android:layout_width="0dp"
-                android:layout_height="68dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:background="@drawable/border"
                 android:gravity="center_vertical"
                 android:hint="Click here to add location"
                 android:textColor="#000000"
                 android:textColorHint="#579791"
                 android:textSize="18sp"
+                android:focusable="false"
+                android:clickable="false"
+                android:cursorVisible="false"
                 app:drawableStartCompat="@drawable/ic_location"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_emergency_contact_no"
-                tools:ignore="HardcodedText" />
+                tools:ignore="Autofill,HardcodedText,TextFields" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/civ_profile_edit_icon"
@@ -410,13 +412,54 @@
     </androidx.core.widget.NestedScrollView>
 
 
-    <include
+   <!-- <include
         android:id="@+id/lyt_header"
         layout="@layout/common_header"
         android:layout_width="0dp"
         android:layout_height="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lyt_header"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#156861"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@null"
+            android:padding="4dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RtlCompat" />
+
+        <TextView
+            android:id="@+id/tv_heading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="24dp"
+            android:text="Add Data"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_back"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText,SpUsage" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
