@@ -12,12 +12,12 @@ import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DataBeanAdapter extends RecyclerView.Adapter<DataBeanAdapter.ViewHolder>{
+public class DataBeanAdapter extends RecyclerView.Adapter<DataBeanAdapter.ViewHolder> {
     private List<DataBean> items;
     private int itemLayout;
     private Context context;
 
-    public DataBeanAdapter(List<DataBean> items){
+    public DataBeanAdapter(List<DataBean> items) {
         this.items = items;
     }
 
@@ -35,6 +35,7 @@ public class DataBeanAdapter extends RecyclerView.Adapter<DataBeanAdapter.ViewHo
             classAndSection = (TextView) itemView.findViewById(R.id.tv_class_section_school_name);
         }
     }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
@@ -43,7 +44,7 @@ public class DataBeanAdapter extends RecyclerView.Adapter<DataBeanAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         DataBean item = items.get(position);
         holder.name.setText(item.name);
         holder.classAndSection.setText(item.classNo);
@@ -51,9 +52,32 @@ public class DataBeanAdapter extends RecyclerView.Adapter<DataBeanAdapter.ViewHo
         holder.civViewDataNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context, DetailActivity.class));
+                DataBean item = items.get(position);
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("image", item.image);
+                intent.putExtra("class", item.classNo);
+                intent.putExtra("name", item.name);
+                intent.putExtra("class", item.classNo);
+                intent.putExtra("section", item.section);
+                intent.putExtra("schoolName", item.schoolName);
+                intent.putExtra("gender", item.gender);
+                intent.putExtra("dob", item.dob);
+                intent.putExtra("bloodGroup", item.bloodGroup);
+                intent.putExtra("fatherName", item.fatherName);
+                intent.putExtra("motherName", item.motherName);
+                intent.putExtra("parentContactNo", item.parentContactNo);
+                intent.putExtra("add1", item.add1);
+                intent.putExtra("add2", item.add2);
+                intent.putExtra("city", item.city);
+                intent.putExtra("state", item.state);
+                intent.putExtra("zip", item.zip);
+                intent.putExtra("emergencyContactNo", item.emergencyContactNo);
+                intent.putExtra("location", item.location);
+                context.startActivity(intent);
+
             }
         });
+
         //All the thing you gonna show in the item
     }
 

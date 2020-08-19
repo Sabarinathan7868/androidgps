@@ -22,7 +22,8 @@ public class StudentDatabaseDashboard extends AppCompatActivity {
         viewStudent = findViewById(R.id.cv_view_student);
         mapView = findViewById(R.id.cv_map_view);
 
-      /*  btnLogout.setOnClickListener(new View.OnClickListener() {
+        //TODO Shared Preference LOGOUT
+       /* btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
         PreferenceUtiles.saveUserName("",getApplicationContext());

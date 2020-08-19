@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -50,15 +51,15 @@ import static java.security.AccessController.getContext;
 @SuppressWarnings("ALL")
 public class AddDataActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    TextView tvDob, tvLocation;
-    EditText etName, etSchoolName, etBloodGroup, etFatherName, etMotherName, etParentsContactNo, etAddress1, etAddress2, etCity, etState, etZip, etEmergencyContactNo;
+    EditText etName, etDob, etSchoolName, etAddLocation, etBloodGroup, etFatherName, etMotherName, etParentsContactNo, etAddress1, etAddress2, etCity, etState, etZip, etEmergencyContactNo;
     DatePickerDialog datePickerDialog;
     Spinner spClassList, spSectionList;
     Button btnAddData;
+    ImageView ivBack;
     CircleImageView civEducationIcon, civProfileEditIcon, cvProfilePicture;
     RadioGroup radioGroup;
-//    RadioButton genderRadioButton;
-RadioButton genderRadioButton, female;
+    //    RadioButton genderRadioButton;
+    RadioButton genderRadioButton, female;
     Integer REQUEST_CAMERA = 0;
     int PLACE_PICKER_REQUEST = 1;
     String lat = "";
@@ -75,14 +76,15 @@ RadioButton genderRadioButton, female;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_data);
-        tvDob = findViewById(R.id.tv_dob);
-        tvLocation = findViewById(R.id.tv_add_location);
+        ivBack = findViewById(R.id.iv_back);
+        etDob = findViewById(R.id.et_dob);
+        etAddLocation = findViewById(R.id.et_add_location);
         spClassList = findViewById(R.id.sp_class_list);
         spSectionList = findViewById(R.id.sp_section_list);
         civProfileEditIcon = findViewById(R.id.civ_profile_edit_icon);
         cvProfilePicture = findViewById(R.id.civ_edit_profile);
         etName = findViewById(R.id.et_name);
-        genderRadioButton  = findViewById(R.id.rb_male);
+        genderRadioButton = findViewById(R.id.rb_male);
         female = findViewById(R.id.rb_female);
         etSchoolName = findViewById(R.id.et_school_name);
         etBloodGroup = findViewById(R.id.et_blood_group);
@@ -103,13 +105,20 @@ RadioButton genderRadioButton, female;
         addDataDb = new DatabaseHelper(this);
 
 
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         btnAddData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO add data into db
                 String name = etName.getText().toString();
                 String schoolName = etSchoolName.getText().toString();
-                String dob = tvDob.getText().toString();
+                String dob = etDob.getText().toString();
                 String classNo = spClassList.getSelectedItem().toString();
                 String section = spSectionList.getSelectedItem().toString();
                 String bloodGroup = etBloodGroup.getText().toString();
@@ -122,10 +131,10 @@ RadioButton genderRadioButton, female;
                 String state = etState.getText().toString();
                 String zip = etZip.getText().toString();
                 String emergencyContactNo = etEmergencyContactNo.getText().toString();
-                String addLocation = tvLocation.getText().toString();
+                String addLocation = etAddLocation.getText().toString();
                 int selectedId = radioGroup.getCheckedRadioButtonId();
 
-                String radioGroup = selectedId == genderRadioButton.getId() ? "Male": (selectedId == female.getId() ? "Female":"");
+                String radioGroup = selectedId == genderRadioButton.getId() ? "Male" : (selectedId == female.getId() ? "Female" : "");
 
                /* Bundle bundle = data.getExtras();
                 final Bitmap bmp = (Bitmap) bundle.get("data");
@@ -137,39 +146,36 @@ RadioButton genderRadioButton, female;
                         emergencyContactNo.equals("") || addLocation.equals("") || byteArray == null || genderRadioButton.equals("")) {
                     Toast.makeText(AddDataActivity.this, "Fields are empty", Toast.LENGTH_SHORT).show();
                 } else {
-                    Boolean addData = addDataDb.addDataInsert(name,radioGroup, classNo, section, schoolName, dob, bloodGroup, fatherName,
-                            motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation, byteArray,lat, longs);
+                    Boolean addData = addDataDb.addDataInsert(name, radioGroup, classNo, section, schoolName, dob, bloodGroup, fatherName,
+                            motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation, byteArray, lat, longs);
                     if (addData == true) {
-                        Boolean addDataInsert = addDataDb.addDataInsert(name, radioGroup, classNo, section, schoolName, dob, bloodGroup, fatherName,
-                                motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation, byteArray, lat, longs);
-                        if (addDataInsert == true) {
-
-                            etName.getText().clear();
-                            etSchoolName.getText().clear();
-                            etBloodGroup.getText().clear();
-                            etFatherName.getText().clear();
-                            etMotherName.getText().clear();
-                            etParentsContactNo.getText().clear();
-                            etAddress1.getText().clear();
-                            etAddress2.getText().clear();
-                            etCity.getText().clear();
-                            etState.getText().clear();
-                            etZip.getText().clear();
-                            etEmergencyContactNo.getText().clear();
-                            tvLocation.setText("");
-                            tvDob.setText("");
+                        /*Boolean addDataInsert = addDataDb.addDataInsert(name, radioGroup, classNo, section, schoolName, dob, bloodGroup, fatherName,
+                                motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation, byteArray, lat, longs);*/
+                        etName.getText().clear();
+                        etSchoolName.getText().clear();
+                        etBloodGroup.getText().clear();
+                        etFatherName.getText().clear();
+                        etMotherName.getText().clear();
+                        etParentsContactNo.getText().clear();
+                        etAddress1.getText().clear();
+                        etAddress2.getText().clear();
+                        etCity.getText().clear();
+                        etState.getText().clear();
+                        etZip.getText().clear();
+                        etEmergencyContactNo.getText().clear();
+                        etAddLocation.setText("");
+                        etDob.setText("");
 
 //                            Intent intent = new Intent(SignUpActivity.this, Sign_in.class);
 //                            startActivity(intent);
-                            Toast.makeText(getApplicationContext(), "Data Registered Successfully", Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(getApplicationContext(), "Data Registered Successfully", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
 
 
-        tvLocation.setOnClickListener(new View.OnClickListener() {
+        etAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pickLocation();
@@ -208,7 +214,7 @@ RadioButton genderRadioButton, female;
         spSectionList.setAdapter(sectionList);
 
 
-        tvDob.setOnClickListener(new View.OnClickListener() {
+        etDob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar calendar = Calendar.getInstance();
@@ -220,7 +226,7 @@ RadioButton genderRadioButton, female;
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        tvDob.setText(day + "-" + (month + 1) + "-" + year);
+                        etDob.setText(day + "-" + (month + 1) + "-" + year);
                     }
                 }, year, month, day);
                 datePickerDialog.show();
@@ -302,8 +308,8 @@ RadioButton genderRadioButton, female;
                 StringBuilder stringBuilder = new StringBuilder();
 
                 try {
-                    this.lat = place.getLatLng().latitude +"";
-                    this.longs = place.getLatLng().longitude+"";
+                    this.lat = place.getLatLng().latitude + "";
+                    this.longs = place.getLatLng().longitude + "";
                     addresses = geocoder.getFromLocation(place.getLatLng().latitude, place.getLatLng().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                     String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                     stringBuilder.append(address);
@@ -312,7 +318,7 @@ RadioButton genderRadioButton, female;
                     String country = addresses.get(0).getCountryName();
                     String postalCode = addresses.get(0).getPostalCode();
                     String knownName = addresses.get(0).getFeatureName();
-                    tvLocation.setText(city + state + country + postalCode + knownName);
+                    etAddLocation.setText(city + state + country + postalCode + knownName);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
