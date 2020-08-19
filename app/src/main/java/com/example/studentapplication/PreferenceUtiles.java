@@ -24,7 +24,8 @@ public class PreferenceUtiles {
 
     public static  String getUserName(Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return  prefs.getString(Constants.KEY_USER_NAME, null);
+        String name = prefs.getString(Constants.KEY_USER_NAME, null);
+        return name ;
     }
 
     public static boolean savePassword(String password, Context context){

@@ -17,6 +17,7 @@ public class Sign_in extends AppCompatActivity {
     DatabaseHelper db;
     Button btnLogin;
     TextView signUp;
+    PreferenceUtiles preference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +29,15 @@ public class Sign_in extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         btnLogin = findViewById(R.id.btn_sign_in_login);
         signUp = findViewById(R.id.sign_up);
-
+        preference = new PreferenceUtiles();
         //TODO for login shared preference
-/*        if (PreferenceUtiles.getUserName(this) != null || !PreferenceUtiles.getUserName(this).equals("")){
+        String name= preference.getUserName(this);
+        if (name != null && !name.equals("")) {
             Intent intent = new Intent(Sign_in.this, StudentDatabaseDashboard.class);
             startActivity(intent);
-        }else{
+        } else {
 
-        }*/
+        }
 
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,8 +56,8 @@ public class Sign_in extends AppCompatActivity {
                 Boolean checkEmailPass = db.userNamePassword(userName, password);
                 //noinspection PointlessBooleanExpression
                 if (checkEmailPass == true) {
-//                    PreferenceUtiles.saveUserName(userName, getApplicationContext());
-//                    PreferenceUtiles.savePassword(password, getApplicationContext());
+                   preference.saveUserName(userName, getApplicationContext());
+                    preference.savePassword(password, getApplicationContext());
                     Intent studentDash = new Intent(Sign_in.this, StudentDatabaseDashboard.class);
                     startActivity(studentDash);
                     Toast.makeText(getApplicationContext(), "Successfully Login", Toast.LENGTH_SHORT).show();

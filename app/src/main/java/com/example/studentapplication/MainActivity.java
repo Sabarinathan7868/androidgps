@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView signUp;
     Button btnLogin;
-
+    PreferenceUtiles preference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
         }*/
 
+        String name= preference.getUserName(this);
+        if (name != null && !name.equals("")) {
+            Intent intent = new Intent(MainActivity.this, StudentDatabaseDashboard.class);
+            startActivity(intent);
+        } else {
+
+        }
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
