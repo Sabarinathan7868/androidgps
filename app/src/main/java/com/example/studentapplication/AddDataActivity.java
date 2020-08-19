@@ -70,7 +70,7 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
 
     String[] section = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
     byte[] byteArray = null;
-
+    boolean stream = false;
     @SuppressLint("CutPasteId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +116,7 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onClick(View view) {
                 //TODO add data into db
+
                 String name = etName.getText().toString();
                 String schoolName = etSchoolName.getText().toString();
                 String dob = etDob.getText().toString();
@@ -140,6 +141,8 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
                 final Bitmap bmp = (Bitmap) bundle.get("data");
                 cvProfilePicture.setImageBitmap(bmp);*/
 
+                if(!stream){
+                    stream = true;
 
                 if (name.equals("") || schoolName.equals("") || dob.equals("") || bloodGroup.equals("") || fatherName.equals("") || motherName.equals("")
                         || parentsContactNo.equals("") || address1.equals("") || address2.equals("") || city.equals("") || state.equals("") || zip.equals("") ||
@@ -148,6 +151,7 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
                 } else {
                     Boolean addData = addDataDb.addDataInsert(name, radioGroup, classNo, section, schoolName, dob, bloodGroup, fatherName,
                             motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation, byteArray, lat, longs);
+
                     if (addData == true) {
                         /*Boolean addDataInsert = addDataDb.addDataInsert(name, radioGroup, classNo, section, schoolName, dob, bloodGroup, fatherName,
                                 motherName, parentsContactNo, address1, address2, city, state, zip, emergencyContactNo, addLocation, byteArray, lat, longs);*/
@@ -165,11 +169,12 @@ public class AddDataActivity extends AppCompatActivity implements AdapterView.On
                         etEmergencyContactNo.getText().clear();
                         etAddLocation.setText("");
                         etDob.setText("");
-
+                        stream = false;
 //                            Intent intent = new Intent(SignUpActivity.this, Sign_in.class);
 //                            startActivity(intent);
                         Toast.makeText(getApplicationContext(), "Data Registered Successfully", Toast.LENGTH_SHORT).show();
                     }
+                }
                 }
             }
         });

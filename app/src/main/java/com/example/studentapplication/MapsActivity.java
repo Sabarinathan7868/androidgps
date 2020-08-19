@@ -2,6 +2,7 @@ package com.example.studentapplication;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,7 +55,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(list.size() > 0){
             for (DataBean data: list ) {
                 LatLng sydney = new LatLng(Double.parseDouble(data.getLat()), Double.parseDouble(data.getLongs()));
-                mMap.addMarker(new MarkerOptions().position(sydney).title(data.getName())).setIcon(BitmapDescriptorFactory.fromBitmap(data.getImage()));
+                mMap.addMarker(new MarkerOptions().position(sydney).title(data.getName())).setIcon(BitmapDescriptorFactory.fromBitmap(this.getResizedBitmap(data.getImage(),80)));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
             }
         }else{
@@ -64,5 +65,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         // Add a marker in Sydney and move the camera
 
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 }
